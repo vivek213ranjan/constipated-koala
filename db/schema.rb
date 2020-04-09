@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_05_212139) do
+ActiveRecord::Schema.define(version: 2020_04_09_121107) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name", null: false
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2020_05_05_212139) do
     t.text "comments", size: :medium
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text "description_nl", size: :medium
+    t.text "description", size: :medium
     t.integer "organized_by"
     t.boolean "is_enrollable"
     t.boolean "is_alcoholic"
@@ -57,8 +57,6 @@ ActiveRecord::Schema.define(version: 2020_05_05_212139) do
     t.boolean "is_masters"
     t.boolean "is_freshmans"
     t.boolean "show_on_website", default: false, null: false
-    t.text "description_en"
-    t.boolean "show_participants", default: true
   end
 
   create_table "admins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -66,6 +64,12 @@ ActiveRecord::Schema.define(version: 2020_05_05_212139) do
     t.string "infix"
     t.string "last_name"
     t.text "signature", size: :medium
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "advertisements", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -150,8 +154,6 @@ ActiveRecord::Schema.define(version: 2020_05_05_212139) do
     t.string "token", limit: 64
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["token"], name: "index_ideal_transactions_on_token", unique: true
-    t.index ["trxid"], name: "index_ideal_transactions_on_trxid", unique: true
   end
 
   create_table "impressions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -259,6 +261,22 @@ ActiveRecord::Schema.define(version: 2020_05_05_212139) do
     t.index ["member_id", "activity_id"], name: "index_participants_on_member_id_and_activity_id", unique: true
   end
 
+  create_table "payconiq_transactions", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.string "token", limit: 16
+    t.string "description"
+    t.decimal "amount", precision: 6, scale: 2
+    t.string "status", default: "PENDING"
+    t.bigint "member_id"
+    t.string "transaction_type"
+    t.string "transaction_id"
+    t.string "trxid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["member_id"], name: "index_payconiq_transactions_on_member_id"
+    t.index ["token"], name: "index_payconiq_transactions_on_token", unique: true
+    t.index ["trxid"], name: "index_payconiq_transactions_on_trxid", unique: true
+  end
+
   create_table "settings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "var", null: false
     t.text "value", size: :medium
@@ -323,7 +341,6 @@ ActiveRecord::Schema.define(version: 2020_05_05_212139) do
     t.integer "credentials_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "language", default: 0, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["credentials_id", "credentials_type"], name: "index_users_on_credentials_id_and_credentials_type", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
