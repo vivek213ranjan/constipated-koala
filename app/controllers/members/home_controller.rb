@@ -105,10 +105,9 @@ class Members::HomeController < ApplicationController
       return
     end
 
-    ideal = IdealTransaction.new(
-      :description => I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout'),
-      :amount => (ideal_transaction_params[:amount].to_f + Settings.mongoose_ideal_costs),
-      :issuer => ideal_transaction_params[:bank],
+    payconiq = PayconiqTransaction.new(
+      :description => 'Mongoose-tegoed',
+      :amount => (ideal_transaction_params[:amount].to_f),
       :member => member,
 
       :transaction_id => nil,
@@ -117,8 +116,8 @@ class Members::HomeController < ApplicationController
       :redirect_uri => users_root_url
     )
 
-    if ideal.save
-      redirect_to ideal.mollie_uri
+    if payconiq.save
+      redirect_to payconiq.qrurl
     else
       flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
       redirect_to members_home_path
