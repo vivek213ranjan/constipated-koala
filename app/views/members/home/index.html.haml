@@ -81,7 +81,7 @@
                   - else
                     %span.label.label-warning= I18n.t('activerecord.attributes.participant.paid.false')
 
-    = form_for :ideal_transaction, :url => :mongoose, :method=> :post, :class => 'form-validation' do |f|
+    = form_for :payconiq_transaction, :url => :mongoose, :method=> :post, :class => 'form-validation' do |f|
       .card.table-dynamic
         .card-header
           %i.fa.fa-fw.fa-fw.fa-shopping-cart

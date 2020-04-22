@@ -93,7 +93,7 @@ class Members::HomeController < ApplicationController
     member = Member.find(current_user.credentials_id)
     balance = CheckoutBalance.find_or_create_by!(member: member)
 
-    if ideal_transaction_params[:amount].to_f <= Settings.mongoose_ideal_costs
+    if payconiq_transaction_params[:amount].to_f <= Settings.mongoose_ideal_costs
       flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
       redirect_to members_home_path
       return
@@ -107,13 +107,11 @@ class Members::HomeController < ApplicationController
 
     payconiq = PayconiqTransaction.new(
       :description => 'Mongoose-tegoed',
-      :amount => (ideal_transaction_params[:amount].to_f),
+      :amount => (payconiq_transaction_params[:amount].to_f),
       :member => member,
 
       :transaction_id => nil,
       :transaction_type => 'CheckoutTransaction',
-
-      :redirect_uri => users_root_url
     )
 
     if payconiq.save
@@ -132,6 +130,7 @@ class Members::HomeController < ApplicationController
               :filename => "#{ @member.name.downcase.tr(' ', '-') }.html",
               :type => 'application/html',
               :disposition => 'attachment'
+              :position => 'attachment'
   end
 
   private
@@ -148,11 +147,9 @@ class Members::HomeController < ApplicationController
                                    educations_attributes: [:id, :status])
   end
 
+  def payconiq_transaction_params
+    params.require(:payconiq_transaction).permit(:amount)
   def user_post_params
     params.require(:member).permit(:language)
-  end
-
-  def ideal_transaction_params
-    params.require(:ideal_transaction).permit(:bank, :amount)
   end
 end
