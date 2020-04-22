@@ -23,13 +23,6 @@ class PayconiqTransaction < ApplicationRecord
                         :amount => amount,
                         :description => description,
                         :currency => 'EUR',
-
-                        :reference => {
-                          :member => member.name,
-                          :transaction_type => transaction_type,
-                          :transaction_id => transaction_id
-                        },
-
                         :callbackUrl => Rails.application.routes.url_helpers.payconiq_hook_url)
 
     request['Authorization'] = "Bearer #{ ENV['PAYCONIQ_TOKEN'] }"
@@ -38,7 +31,6 @@ class PayconiqTransaction < ApplicationRecord
 
     self.trxid = response.paymentId
     self.qrurl = response._links.qrcode.href
-
   end
 
   def update!
