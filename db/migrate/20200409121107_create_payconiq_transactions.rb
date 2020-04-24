@@ -11,6 +11,7 @@ class CreatePayconiqTransactions < ActiveRecord::Migration[6.0]
       t.string :transaction_type
       t.string :transaction_id
       t.string :trxid
+      t.string :qrurl
       
       t.timestamps
     end

@@ -17,20 +17,22 @@ class PayconiqTransaction < ApplicationRecord
 
   after_validation(on: :create) do
     http = ConstipatedKoala::Request.new ENV['PAYCONIQ_DOMAIN']
-    self.token = Digest::SHA256.hexdigest("#{ member.id }#{ Time.now.to_f }")
+    self.token = Digest::SHA256.hexdigest("#{ member.id }#{ Time.now.to_f }#{ Rails.application.routes.url_helpers.payconiq_hook_url}")
 
-    request = http.post("/#{ ENV['PAYCONIQ_VERSION'] }/payments",
-                        :amount => amount,
-                        :description => description,
-                        :currency => 'EUR',
-                        :callbackUrl => Rails.application.routes.url_helpers.payconiq_hook_url)
+    request = http.post("/#{ ENV['PAYCONIQ_VERSION'] }/payments")
 
+
+    request.body =  { :amount => (amount*100).to_i,
+                      :currency => 'EUR',
+                      :callbackUrl => Rails.application.routes.url_helpers.payconiq_hook_url
+                    }.to_json
     request['Authorization'] = "Bearer #{ ENV['PAYCONIQ_TOKEN'] }"
+    request.content_type= 'application/json'
     request['Cache-Control'] = "no-cache"
     response = http.send! request
 
     self.trxid = response.paymentId
-    self.qrurl = response._links.qrcode.href
+    qrurl = response._links.qrcode.href
   end
 
   def update!
