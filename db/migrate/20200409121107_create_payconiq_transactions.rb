@@ -1,7 +1,7 @@
 class CreatePayconiqTransactions < ActiveRecord::Migration[6.0]
   def change
     create_table :payconiq_transactions, :id => false  do |t|
-      t.string :token, :unique => true, :limit => 16
+      t.string :token, :unique => true, :limit => 64
       t.string :description
 
       t.decimal :amount, :scale => 2, :precision => 6
@@ -12,6 +12,7 @@ class CreatePayconiqTransactions < ActiveRecord::Migration[6.0]
       t.string :transaction_id
       t.string :trxid
       t.string :qrurl
+      t.string :deeplink
       
       t.timestamps
     end

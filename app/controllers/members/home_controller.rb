@@ -115,7 +115,7 @@ class Members::HomeController < ApplicationController
     )
 
     if payconiq.save
-      redirect_to payconiq.qrurl
+       render :json => {qrurl: payconiq.qrurl, amount: payconiq.amount, deeplink: payconiq.deeplink}.to_json
     else
       flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
       redirect_to members_home_path

@@ -262,7 +262,7 @@ ActiveRecord::Schema.define(version: 2020_04_09_121107) do
   end
 
   create_table "payconiq_transactions", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.string "token", limit: 16
+    t.string "token", limit: 64
     t.string "description"
     t.decimal "amount", precision: 6, scale: 2
     t.string "status", default: "PENDING"
