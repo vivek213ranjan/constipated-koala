@@ -1,14 +1,13 @@
 #:nodoc:
 class PayconiqTransaction < ApplicationRecord
   require 'request'
-
+  
   self.primary_key = :token
 
-  attr_accessor :message
+  attr_accessor :message, :qrurl, :deeplink
   validates :description, presence: true
   validates :amount, presence: true, numericality: true
   validates :status, presence: true
-
   belongs_to :member
 
 
@@ -17,22 +16,22 @@ class PayconiqTransaction < ApplicationRecord
 
   after_validation(on: :create) do
     http = ConstipatedKoala::Request.new ENV['PAYCONIQ_DOMAIN']
-    self.token = Digest::SHA256.hexdigest("#{ member.id }#{ Time.now.to_f }#{ Rails.application.routes.url_helpers.payconiq_hook_url}")
+    self.token = Digest::SHA256.hexdigest("#{ member.id }#{ Time.now.to_f }")
 
     request = http.post("/#{ ENV['PAYCONIQ_VERSION'] }/payments")
 
-
+    ## TODO: Fixcallback url
     request.body =  { :amount => (amount*100).to_i,
                       :currency => 'EUR',
-                      :callbackUrl => Rails.application.routes.url_helpers.payconiq_hook_url
+                      :callbackUrl => "http://69477e9d.ngrok.io/api/hook/payconiq"
                     }.to_json
     request['Authorization'] = "Bearer #{ ENV['PAYCONIQ_TOKEN'] }"
     request.content_type= 'application/json'
     request['Cache-Control'] = "no-cache"
     response = http.send! request
-
     self.trxid = response.paymentId
-    qrurl = response._links.qrcode.href
+    self.qrurl = response[:_links][:qrcode][:href]
+    self.deeplink = response[:_links][:deeplink][:href]
   end
 
   def update!
@@ -41,14 +40,13 @@ class PayconiqTransaction < ApplicationRecord
 
     request = http.get("/#{ ENV['PAYCONIQ_VERSION'] }/payments/#{ trxid }")
     request['Authorization'] = "Bearer #{ ENV['PAYCONIQ_TOKEN'] }"
-
+    request.content_type= 'application/json'
     response = http.send! request
     self.status = response.status
     save!
 
     # first time paid as a response
     return true if status == 'SUCCEEDED' && @status != 'SUCCEEDED'
-    # TODO: Add I18n translation 
     self.message = I18n.t('processed', scope: 'activerecord.errors.models.ideal_transaction')
     return false
   end
@@ -73,7 +71,7 @@ class PayconiqTransaction < ApplicationRecord
 
       # create a single transaction to update the checkoutbalance and mark the ideal transaction as processed
       PayconiqTransaction.transaction do
-        transaction = CheckoutTransaction.create!(:price => (amount), :checkout_balance => CheckoutBalance.find_by_member_id!(member), :payment_method => "Payconiq")
+        transaction = CheckoutTransaction.create!(:price => (amount), :checkout_balance => CheckoutBalance.find_by_member_id!(member), :payment_method => "payconq")
 
         self.transaction_id = [transaction.id]
         save!
