@@ -88,7 +88,32 @@ class Members::HomeController < ApplicationController
     render 'edit'
     return
   end
+  def pay_activities
+    member = Member.find(current_user.credentials_id) 
+    unpaid = Participant
+                .where(paid: false, member: member, reservist: false)
+                .joins(:activity)
+                .where('activities.start_date < NOW()')
+                .select {|n| params[:activity_ids].map(&:to_i).include? n.activity_id}
 
+
+    amount = unpaid.sum { |e| e.price.to_i } + Activity.where(id: unpaid.where(price: nil).map(&:activity_id)).sum(:price)
+
+    payconiq = PayconiqTransaction.new(
+      :description => 'Activiteiten-betaling',
+      :amount => amount,
+      :member => member,
+
+      :transaction_id => unpaid.map(&:activity_id),
+      :transaction_type => 'activity'
+        )
+    if payconiq.save
+      render :json => {qrurl: payconiq.qrurl, amount: payconiq.amount, deeplink: payconiq.deeplink}.to_json
+    else
+      flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
+      redirect_to members_home_path
+    end
+  end
   def add_funds
     member = Member.find(current_user.credentials_id)
     balance = CheckoutBalance.find_or_create_by!(member: member)
@@ -111,7 +136,7 @@ class Members::HomeController < ApplicationController
       :member => member,
 
       :transaction_id => nil,
-      :transaction_type => 'CheckoutTransaction',
+      :transaction_type => 'CheckoutTransaction'
     )
 
     if payconiq.save

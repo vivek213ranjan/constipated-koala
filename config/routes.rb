@@ -20,6 +20,7 @@ Rails.application.routes.draw do
         get 'download', to: 'home#download'
 
         post 'mongoose', to: 'home#add_funds'
+        post 'pay_activities', to: 'home#pay_activities'
 
         # TODO: should this be moved to nginx or
         # @deprated these old routes

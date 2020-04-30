@@ -14,6 +14,11 @@ $(document).on('ready page:load turbolinks:load', function(){
     params.year = $(this).val();
     location.search = $.param(params);
   });
+
+    $('#check_all').on("click", function(){
+        var cbxs = $('input[type="checkbox"]');
+        cbxs.prop("checked", !cbxs.prop("checked"));
+    });
 });
 
 $(document).on('ajax:success', function(event, data){
@@ -22,7 +27,7 @@ $(document).on('ajax:success', function(event, data){
   } else {
       Swal.fire({
           title: "Scan the QR Code!",
-          text: "Scan the QR Code with the payconiq application to finish this payment",
+          text: "Scan the QR Code with the payconiq application to finish this payment, cost is : " + data.amount,
           imageWidth: 400,
           imageHeight: 400,
           imageUrl: data.qrurl + "&s=L",
