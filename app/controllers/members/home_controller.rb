@@ -45,7 +45,7 @@ class Members::HomeController < ApplicationController
              .where(:participants => { member: @member, reservist: false })
              .order('start_date DESC')
 
-    @transactions = CheckoutTransaction.where(:checkout_balance => CheckoutBalance.find_by_member_id(current_user.credentials_id)).order(created_at: :desc).limit(10)
+    @transactions = ParticipantTransaction.all #CheckoutTransaction.where(:checkout_balance => CheckoutBalance.find_by_member_id(current_user.credentials_id)).order(created_at: :desc).limit(10)
     @transaction_costs = Settings.mongoose_ideal_costs
   end
 
@@ -95,16 +95,15 @@ class Members::HomeController < ApplicationController
                 .joins(:activity)
                 .where('activities.start_date < NOW()')
                 .select {|n| params[:activity_ids].map(&:to_i).include? n.activity_id}
-
-
-    amount = unpaid.sum { |e| e.price.to_i } + Activity.where(id: unpaid.where(price: nil).map(&:activity_id)).sum(:price)
+    
+    amount = unpaid.sum(&:currency)
 
     payconiq = PayconiqTransaction.new(
       :description => 'Activiteiten-betaling',
       :amount => amount,
       :member => member,
 
-      :transaction_id => unpaid.map(&:activity_id),
+      :transaction_id => unpaid.pluck(:activity_id),
       :transaction_type => 'activity'
         )
     if payconiq.save

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_09_121107) do
+ActiveRecord::Schema.define(version: 2020_04_30_110627) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name", null: false
@@ -249,6 +249,14 @@ ActiveRecord::Schema.define(version: 2020_04_09_121107) do
     t.index ["access_grant_id"], name: "fk_rails_77114b3b09"
   end
 
+  create_table "participant_transactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.bigint "member_id"
+    t.string "activity_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["member_id"], name: "index_participant_transactions_on_member_id"
+  end
+
   create_table "participants", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "member_id"
     t.integer "activity_id"
@@ -270,6 +278,8 @@ ActiveRecord::Schema.define(version: 2020_04_09_121107) do
     t.string "transaction_type"
     t.string "transaction_id"
     t.string "trxid"
+    t.string "qrurl"
+    t.string "deeplink"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["member_id"], name: "index_payconiq_transactions_on_member_id"

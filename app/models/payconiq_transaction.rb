@@ -23,7 +23,7 @@ class PayconiqTransaction < ApplicationRecord
     ## TODO: Fixcallback url
     request.body =  { :amount => (amount*100).to_i,
                       :currency => 'EUR',
-                      :callbackUrl => "http://69477e9d.ngrok.io/api/hook/payconiq"
+                      :callbackUrl => "http://f92dc026.ngrok.io/api/hook/payconiq"
                     }.to_json
     request['Authorization'] = "Bearer #{ ENV['PAYCONIQ_TOKEN'] }"
     request.content_type= 'application/json'
@@ -56,17 +56,17 @@ class PayconiqTransaction < ApplicationRecord
     case transaction_type.downcase
     when 'activity'
 
-      # loop thru activities and mark one as paid
+      ##TODO: Make it a atomic transaction
       transaction_id.each do |activity|
         participant = Participant.where("member_id = ? AND activity_id = ?", member.id, activity)
         participant.first.paid = true
         participant.first.save
       end
+      transaction = ParticipantTransaction.create!(:member => member, :activity_id => transaction_id)
+      self.transaction_id = [transaction.id]
 
       self.message = I18n.t('success', scope: 'activerecord.errors.models.ideal_transaction')
-
     when 'checkouttransaction'
-      # additional check if not already added checkout funds
       return unless transaction_id.empty?
 
       # create a single transaction to update the checkoutbalance and mark the ideal transaction as processed
