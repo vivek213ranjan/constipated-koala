@@ -45,7 +45,7 @@ class Members::HomeController < ApplicationController
              .where(:participants => { member: @member, reservist: false })
              .order('start_date DESC')
 
-    @transactions = ParticipantTransaction.all #CheckoutTransaction.where(:checkout_balance => CheckoutBalance.find_by_member_id(current_user.credentials_id)).order(created_at: :desc).limit(10)
+    @transactions = ParticipantTransaction.all # CheckoutTransaction.where(:checkout_balance => CheckoutBalance.find_by_member_id(current_user.credentials_id)).order(created_at: :desc).limit(10)
     @transaction_costs = Settings.mongoose_ideal_costs
   end
 
@@ -88,14 +88,15 @@ class Members::HomeController < ApplicationController
     render 'edit'
     return
   end
+
   def pay_activities
-    member = Member.find(current_user.credentials_id) 
+    member = Member.find(current_user.credentials_id)
     unpaid = Participant
-                .where(paid: false, member: member, reservist: false)
-                .joins(:activity)
-                .where('activities.start_date < NOW()')
-                .select {|n| params[:activity_ids].map(&:to_i).include? n.activity_id}
-    
+             .where(paid: false, member: member, reservist: false)
+             .joins(:activity)
+             .where('activities.start_date < NOW()')
+             .select { |n| params[:activity_ids].map(&:to_i).include? n.activity_id }
+
     amount = unpaid.sum(&:currency)
 
     payconiq = PayconiqTransaction.new(
@@ -105,14 +106,15 @@ class Members::HomeController < ApplicationController
 
       :transaction_id => unpaid.pluck(:activity_id),
       :transaction_type => 'activity'
-        )
+    )
     if payconiq.save
-      render :json => {qrurl: payconiq.qrurl, amount: payconiq.amount, deeplink: payconiq.deeplink}.to_json
+      render :json => { qrurl: payconiq.qrurl, amount: payconiq.amount, deeplink: payconiq.deeplink }.to_json
     else
       flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
       redirect_to members_home_path
     end
   end
+
   def add_funds
     member = Member.find(current_user.credentials_id)
     balance = CheckoutBalance.find_or_create_by!(member: member)
@@ -131,7 +133,7 @@ class Members::HomeController < ApplicationController
 
     payconiq = PayconiqTransaction.new(
       :description => 'Mongoose-tegoed',
-      :amount => (payconiq_transaction_params[:amount].to_f),
+      :amount => payconiq_transaction_params[:amount].to_f,
       :member => member,
 
       :transaction_id => nil,
@@ -139,7 +141,7 @@ class Members::HomeController < ApplicationController
     )
 
     if payconiq.save
-       render :json => {qrurl: payconiq.qrurl, amount: payconiq.amount, deeplink: payconiq.deeplink}.to_json
+      render :json => { qrurl: payconiq.qrurl, amount: payconiq.amount, deeplink: payconiq.deeplink }.to_json
     else
       flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
       redirect_to members_home_path

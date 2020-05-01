@@ -1,3 +1,4 @@
+#:nodoc:
 class ParticipantTransaction < ApplicationRecord
   validates :member, presence: true
   belongs_to :member
