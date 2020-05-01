@@ -87,7 +87,7 @@
       .card.table-dynamic
         .card-header
           %i.fa.fa-fw.fa-fw.fa-shopping-cart
-          = I18n.t('activerecord.models.checkout_transactions')
+          = I18n.t('activerecord.models.activity_transactions')
 
         %table.table.card-body
           %tbody
@@ -95,11 +95,10 @@
               %tr
                 %td.d-block.d-sm-none{ :colspan => 2 }= I18n.l transaction.created_at
                 %td.d-none.d-sm-table-cell= I18n.l transaction.created_at
-
-                %td.d-none.d-sm-table-cell= transaction.products
+                %td.d-none.d-sm-table-cell= transaction.activities.map(&:name).join(', ')
                 %td
-                  = number_to_currency(transaction.price, :unit => '€')
-                  - if transaction.price > 0
+                  = number_to_currency(transaction.sum, :unit => '€')
+                  - if transaction.sum > 0
                     %span.fa.fa-sort-asc.float-right
                   - else
                     %span.fa.fa-sort-desc.float-right
