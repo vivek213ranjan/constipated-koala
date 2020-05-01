@@ -21,6 +21,7 @@ class PayconiqTransaction < ApplicationRecord
     request = http.post("/#{ ENV['PAYCONIQ_VERSION'] }/payments")
 
     ## TODO: Fixcallback url
+    # Currently using Ngrok for local debugging should be changed later on
     request.body =  { :amount => (amount*100).to_i,
                       :currency => 'EUR',
                       :callbackUrl => "http://f92dc026.ngrok.io/api/hook/payconiq"
