@@ -129,7 +129,8 @@ class Members::ParticipantsController < ApplicationController
       render status: :accepted, json: {
         message: reason_for_spare_message + ' ' + spare_list_message,
         participant_limit: @activity.participant_limit,
-        participant_count: @activity.participants.count
+        participant_count: @activity.participants.count,
+        reservists: reservists.push(@new_enrollment)
       }
       return
     else
@@ -147,7 +148,8 @@ class Members::ParticipantsController < ApplicationController
           @activity_errors_scope, activity:
                           @activity.name),
         participant_limit: @activity.participant_limit,
-        participant_count: @activity.participants.count
+        participant_count: @activity.participants.count,
+        attendees: attendees.push(@new_enrollment)
       }
     end
   end
