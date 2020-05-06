@@ -8,6 +8,8 @@ class PayconiqTransaction < ApplicationRecord
   validates :description, presence: true
   validates :amount, presence: true, numericality: true
   validates :status, presence: true
+  validates :is_online, presence: true
+
   belongs_to :member
 
   validates :transaction_type, presence: true

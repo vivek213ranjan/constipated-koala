@@ -278,6 +278,7 @@ ActiveRecord::Schema.define(version: 2020_05_02_094335) do
     t.bigint "member_id"
     t.string "transaction_type"
     t.string "transaction_id"
+    t.string "is_online"
     t.string "trxid"
     t.string "qrurl"
     t.string "deeplink"

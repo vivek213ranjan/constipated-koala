@@ -10,10 +10,12 @@ class CreatePayconiqTransactions < ActiveRecord::Migration[6.0]
 
       t.string :transaction_type
       t.string :transaction_id
+
+      t.string :is_online
       t.string :trxid
       t.string :qrurl
       t.string :deeplink
-      
+
       t.timestamps
     end
     add_index :payconiq_transactions, :token, :unique => true
