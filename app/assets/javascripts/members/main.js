@@ -2,6 +2,8 @@ $(document).on('ready page:load turbolinks:load', function(){
   setup_intl_tel_input();
 
   // Callback handler for menu
+  $('.ideal').hide(); $('.payconiq').show();
+
   $('.toggle-min').click(function(event){
     event.preventDefault();
 
@@ -9,16 +11,26 @@ $(document).on('ready page:load turbolinks:load', function(){
   });
 
   $('#year').on('change', function(){
-    var params = {};
+      var params = {};
 
     params.year = $(this).val();
     location.search = $.param(params);
-  });
+    });
 
     $('#check_all').on("click", function(){
         var cbxs = $('input[type="checkbox"]');
         cbxs.prop("checked", !cbxs.prop("checked"));
     });
+
+    $('#payment_type').on('change', function(){
+        console.log(this.value)
+        if (this.value == "Payconiq"){
+            $('.payconiq').show(); $('.ideal').hide();
+        }
+        else{
+            $('.ideal').show(); $('.payconiq').hide();
+        }
+    })
 });
 
 $(document).on('ajax:success', function(event, data){
