@@ -73,7 +73,7 @@ class PayconiqTransaction < ApplicationRecord
 
       # create a single transaction to update the checkoutbalance and mark the ideal transaction as processed
       PayconiqTransaction.transaction do
-        transaction = CheckoutTransaction.create!(:price => amount, :checkout_balance => CheckoutBalance.find_by_member_id!(member), :payment_method => "payconq")
+        transaction = CheckoutTransaction.create!(:price => amount - Settings.payconiq_transaction_costs, :checkout_balance => CheckoutBalance.find_by_member_id!(member), :payment_method => "payconq")
 
         self.transaction_id = [transaction.id]
         save!
