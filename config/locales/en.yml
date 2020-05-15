@@ -159,6 +159,9 @@ en:
         mongoose_ideal_costs:
           description: The costs of an iDEAL transaction. They can be calculated separately in the iDEAL overview this way.
           name: IDeal transaction costs
+        payconiq_transaction_costs:
+          description: The costs of an Payconiq transaction. They can be calculated separately in the Payconiq overview this way.
+          name: Payconiq transaction costs
         positions:
           board: Board member
           chairman: Chairman

@@ -45,7 +45,8 @@ class Members::HomeController < ApplicationController
              .where(:participants => { member: @member, reservist: false })
              .order('start_date DESC')
 
-    @transactions = ParticipantTransaction.all # CheckoutTransaction.where(:checkout_balance => CheckoutBalance.find_by_member_id(current_user.credentials_id)).order(created_at: :desc).limit(10)
+    @transactions = CheckoutTransaction.where(:checkout_balance => CheckoutBalance.find_by_member_id(current_user.credentials_id)).order(created_at: :desc).limit(10) #ParticipantTransaction.all #
+    @payconiq_transaction_costs = Settings.payconiq_transaction_costs
     @transaction_costs = Settings.mongoose_ideal_costs
   end
 
@@ -102,7 +103,7 @@ class Members::HomeController < ApplicationController
     if transaction_params[:payment_type] == "Payconiq"
       payconiq = PayconiqTransaction.new(
         :description => 'Activiteiten-betaling',
-        :amount => amount,
+        :amount => amount + Settings.payconiq_transaction_costs,
         :member => member,
         :is_online => true,
 
@@ -156,7 +157,7 @@ class Members::HomeController < ApplicationController
     if transaction_params[:payment_type] == "Payconiq"
       payconiq = PayconiqTransaction.new(
         :description => I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout'),
-        :amount => transaction_params[:amount].to_f,
+        :amount => transaction_params[:amount].to_f + Settings.payconiq_transaction_costs,
         :member => member,
         :is_online => true,
 
