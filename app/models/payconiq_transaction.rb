@@ -26,7 +26,7 @@ class PayconiqTransaction < ApplicationRecord
     request.body = { :amount => (amount * 100).to_i,
                      :currency => 'EUR',
                      :callbackUrl => "http://f92dc026.ngrok.io/api/hook/payconiq" }.to_json
-    request['Authorization'] = "Bearer #{ is_online ? ENV['PAYCONIQ_ONLINE_TOKEN'] : ENV['PAYCONIQ_DISPLAY_TOKEN']}"
+    request['Authorization'] = "Bearer #{ is_online ? ENV['PAYCONIQ_ONLINE_TOKEN'] : ENV['PAYCONIQ_DISPLAY_TOKEN'] }"
     request.content_type = 'application/json'
     request['Cache-Control'] = "no-cache"
     response = http.send! request
@@ -40,7 +40,7 @@ class PayconiqTransaction < ApplicationRecord
     @status = status
 
     request = http.get("/#{ ENV['PAYCONIQ_VERSION'] }/payments/#{ trxid }")
-    request['Authorization'] = "Bearer #{ is_online ? ENV['PAYCONIQ_ONLINE_TOKEN'] : ENV['PAYCONIQ_DISPLAY_TOKEN']}"
+    request['Authorization'] = "Bearer #{ is_online ? ENV['PAYCONIQ_ONLINE_TOKEN'] : ENV['PAYCONIQ_DISPLAY_TOKEN'] }"
     request.content_type = 'application/json'
     response = http.send! request
     self.status = response.status
