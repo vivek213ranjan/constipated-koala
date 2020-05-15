@@ -54,7 +54,7 @@
             = select_tag :year, options_for_select( @years), class: 'year-selector'
             = f.submit "betaal activiteiten", class: 'button btn btn-success btn-sm', type: "submit", id: "pay-activity"
             = submit_tag 'checkall', :type => 'button', class: "btn btn-success btn-sm", id: 'check-all'
-            = select_tag :payment_type, options_for_select([%w[Payconiq Payconiq],%w[Ideal Ideal]])
+            = select_tag :payment_type, options_for_select([["Payconiq +€#{String(@payconiq_transaction_costs)}", 'Payconiq'],["Ideal +€#{String(@transaction_costs)}", 'Ideal']])
         %table.table.table-striped
           %tbody
             - @participants.each do |activity|
@@ -88,7 +88,7 @@
       .card-header
         %i.fa.fa-fw.fa-fw.fa-shopping-cart
         %span= I18n.t("activerecord.models.transactions")
-        = select("", "payment-type", [["Payconiq","Payconiq"],["Ideal","Ideal"]])
+        = select("", "payment-type", [["Payconiq +€#{String(@payconiq_transaction_costs)}", 'Payconiq'],["Ideal +€#{String(@transaction_costs)}", 'Ideal']])
       %table.table.card-body
         %tbody
           - @transactions.each do |transaction|
@@ -106,7 +106,7 @@
             = f.hidden_field(:payment_type, :value => "Payconiq")
             %tr.form.payconiq
               %td.home_mongoose_form_element
-                = f.number_field :amount, :placeholder => I18n.t('members.home.index.credit'), :min => 1, :pattern => '^\d+(\.|\,)\d{2}$', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', :title => 'Er wordt €' + String(@transaction_costs) + " #{ I18n.t('members.home.index.transaction_costs')}", :required => ''
+                = f.number_field :amount, :placeholder => I18n.t('members.home.index.credit'), :min => 1, :pattern => '^\d+(\.|\,)\d{2}$', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', :title => 'Er wordt €' + String(@payconiq_transaction_costs) + " #{ I18n.t('members.home.index.transaction_costs')}", :required => ''
               %td.home_mongoose_form_element
                 %button.btn.btn-success.btn-sm{ :type => 'submit'}= I18n.t('members.home.index.upgrade')
 

@@ -20,6 +20,7 @@ $(document).on('ready page:load turbolinks:load', function(){
     $('#check-all').on("click", function(){
         var cbxs = $('input[type="checkbox"]');
         cbxs.prop("checked", !cbxs.prop("checked"));
+        $("#pay-activity").prop("disabled", $(':checkbox:checked').length == 0);
     });
 
     $('#payment-type').on('change', function(){
