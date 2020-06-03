@@ -15,7 +15,10 @@
       .card-header
         %i.fa.fa-fw.fa-credit-card
         = I18n.t('admin.payment.ideal')
-
+        = form_tag payment_path, :method => :get do
+          = select_tag 'payment', options_for_select(Payment.payment_types), :include_blank => "all"
+          = select_tag 'type', options_for_select(Payment.transaction_types), :include_blank => "all"
+          = submit_tag 'Search'
       .table-responsive
         %table.table.table-bordered.table-striped.table-linked
           %thead
@@ -55,12 +58,11 @@
               %td= number_to_currency(transaction.amount, :unit => '€')
 
               %td
-                - if transaction.status == 'paid' || transaction.status == 'paidout'
+                - if transaction.status == 'paid' || transaction.status == 'paidout' || transaction.status == "SUCCEEDED"
                   %span.label.label-success= transaction.status
                 - elsif transaction.status == 'open' || transaction.status == 'pending'
                   %span.label.label-warning= transaction.status
                 - else
                   %span.label.label-danger= transaction.status
-
       .card-footer
         = render partial: 'layouts/partials/pagination', locals: {pagy: @pagination}

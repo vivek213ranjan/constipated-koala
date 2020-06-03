@@ -101,9 +101,8 @@ Rails.application.routes.draw do
       end
 
       scope 'apps' do
-        get 'ideal',              to: 'apps#ideal'
+        get 'payments',           to: 'apps#payments', as:'payment'
         get 'checkout',           to: 'apps#checkout'
-        get 'payconiq',           to: 'apps#payconiq'
 
         # json checkout urls
         patch  'cards',           to: 'checkout_products#activate_card'
