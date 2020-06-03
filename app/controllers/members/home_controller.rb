@@ -101,36 +101,35 @@ class Members::HomeController < ApplicationController
     amount = unpaid.sum(&:currency)
 
     if transaction_params[:payment_type] == "Payconiq"
-      payconiq = PayconiqTransaction.new(
+      payconiq = Payment.new(
         :description => 'Activiteiten-betaling',
-        :amount => amount + Settings.payconiq_transaction_costs,
+        :amount => amount,
         :member => member,
-        :is_online => true,
-
+        :payment_type => :payconiq_online,
         :transaction_id => unpaid.pluck(:activity_id),
-        :transaction_type => 'activity'
+        :transaction_type => :activity
       )
       if payconiq.save
-        render :json => { qrurl: payconiq.qrurl, amount: payconiq.amount, deeplink: payconiq.deeplink }.to_json
+        render :json => { qrurl: payconiq.payconiq_qrurl, amount: payconiq.amount, deeplink: payconiq.payconiq_deeplink }.to_json
       else
         flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
         redirect_to members_home_path
       end
     else
-      ideal = IdealTransaction.new(
+      ideal = Payment.new(
         :description => I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout'),
         :amount => (transaction_params[:amount].to_f + Settings.mongoose_ideal_costs),
         :issuer => transaction_params[:bank],
         :member => member,
-
+        :payment_type => :ideal,
         :transaction_id => unpaid.pluck(:activity_id),
-        :transaction_type => 'activity',
+        :transaction_type => :activity,
 
-        :redirect_uri => users_root_url
+        :ideal_redirect_uri => users_root_url
       )
 
       if ideal.save
-        redirect_to ideal.mollie_uri
+        redirect_to ideal.ideal_uri
       else
         flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
         redirect_to members_home_path
@@ -155,37 +154,38 @@ class Members::HomeController < ApplicationController
     end
 
     if transaction_params[:payment_type] == "Payconiq"
-      payconiq = PayconiqTransaction.new(
+      payment = Payment.new(
         :description => I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout'),
-        :amount => transaction_params[:amount].to_f + Settings.payconiq_transaction_costs,
+        :amount => transaction_params[:amount].to_f,
         :member => member,
-        :is_online => true,
+        :payment_type => :payconiq_online,
 
         :transaction_id => nil,
-        :transaction_type => 'CheckoutTransaction'
+        :transaction_type => :checkout
       )
 
-      if payconiq.save
-        render :json => { qrurl: payconiq.qrurl, amount: payconiq.amount, deeplink: payconiq.deeplink }.to_json
+      if payment.save
+        render :json => { payconiq_qrurl: payment.payconiq_qrurl, amount: payment.amount, payconiq_deeplink: payment.payconiq_deeplink }
       else
         flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
         redirect_to members_home_path
       end
     else
-      ideal = IdealTransaction.new(
+      payment = Payment.new(
         :description => I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout'),
-        :amount => (transaction_params[:amount].to_f + Settings.mongoose_ideal_costs),
+        :amount => transaction_params[:amount].to_f,
         :issuer => transaction_params[:bank],
         :member => member,
+        :payment_type => :ideal,
 
         :transaction_id => nil,
-        :transaction_type => 'CheckoutTransaction',
+        :transaction_type => :checkout,
 
-        :redirect_uri => users_root_url
+        :ideal_redirect_uri => users_root_url
       )
 
-      if ideal.save
-        redirect_to ideal.mollie_uri
+      if payment.save
+        redirect_to ideal.ideal_uri
       else
         flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
         redirect_to members_home_path

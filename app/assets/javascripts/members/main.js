@@ -32,7 +32,7 @@ $(document).on("ready page:load turbolinks:load", function () {
         }
     })
 
-    $("#pay-activity").prop("disabled", true); // Disable buttons
+    $("#pay-activity").prop("disabled", $(':checkbox:checked').length == 0)
 
     $(":checkbox").
     on('click', function() {
