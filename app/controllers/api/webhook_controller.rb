@@ -1,7 +1,7 @@
 #:nodoc:
 class Api::WebhookController < ApiController
   def mollie_redirect
-    transaction = IdealTransaction.find_by_token!(params[:token])
+    transaction = Payment.find_by_token!(params[:token])
     transaction.finalize! if transaction.update!
 
     flash[:notice] = transaction.message
@@ -13,14 +13,16 @@ class Api::WebhookController < ApiController
   end
 
   def mollie_hook
-    transaction = IdealTransaction.find_by_trxid!(params[:id])
+    transaction = Payment.find_by_trxid!(params[:id])
     transaction.finalize! if transaction.update!
 
     head :ok
   end
 
   def payconiq_hook
-    transaction = PayconiqTransaction.find_by_trxid!(params[:paymentId])
+    puts "hoook"
+    puts params[:paymentId]
+    transaction = Payment.find_by_trxid!(params[:paymentId])
     transaction.finalize! if transaction.update!
 
     head :ok
