@@ -109,8 +109,8 @@
                 %tr
                   %td= I18n.l transaction.created_at, :format => :short
                   %td{ :style => 'min-width: 80px;' }
-                    = number_to_currency(transaction.sum, :unit => '€')
-                    - if transaction.sum > 0
+                    = number_to_currency(transaction.amount, :unit => '€')
+                    - if transaction.amount > 0
                       %span.fa.fa-sort-asc.float-right{ :style => 'padding-up: 3px;'}
                     - else
                       %span.fa.fa-sort-desc.float-right

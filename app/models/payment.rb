@@ -25,7 +25,6 @@ class Payment < ApplicationRecord
 
   after_validation(on: :create) do
     self.amount += transaction_fee
-    puts transaction_fee
     case :payment_type
     when :ideal
       http = ConstipatedKoala::Request.new ENV['MOLLIE_DOMAIN']
@@ -63,7 +62,7 @@ class Payment < ApplicationRecord
 
       request.body = { :amount => (amount * 100).to_i,
                        :currency => 'EUR',
-                       :callbackUrl => "http://51faf1b25227.ngrok.io/api/hook/payconiq" }.to_json
+                       :callbackUrl => "http://75a349d5c728.ngrok.io/api/hook/payconiq" }.to_json
 
       request['Authorization'] = "Bearer #{ payconiq_online? ? ENV['PAYCONIQ_ONLINE_TOKEN'] : ENV['PAYCONIQ_DISPLAY_TOKEN'] }"
       request.content_type = 'application/json'
@@ -120,7 +119,6 @@ class Payment < ApplicationRecord
 
   # mark transaction_types as paid
   def finalize!
-    puts transaction_type
     case transaction_type.to_sym
     when :activity
 
@@ -133,13 +131,11 @@ class Payment < ApplicationRecord
       self.message = I18n.t('success', scope: 'activerecord.errors.models.ideal_transaction')
 
     when :checkout
-      puts transaction_id
       # additional check if not already added checkout funds
       return unless transaction_id.empty?
-
       # create a single transaction to update the checkoutbalance and mark the Payment as processed
       Payment.transaction do
-        transaction = CheckoutTransaction.create!(:price => (amount - transaction_fee), :checkout_balance => CheckoutBalance.find_by_member_id!(member), :payment_method => :payment_type)
+        transaction = CheckoutTransaction.create!(:price => (amount - transaction_fee), :checkout_balance => CheckoutBalance.find_by_member_id!(member), :payment_method => payment_type)
 
         self.transaction_id = [transaction.id]
         save!
