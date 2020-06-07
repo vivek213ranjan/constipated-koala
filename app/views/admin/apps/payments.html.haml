@@ -14,10 +14,13 @@
     %section.card.table-dynamic
       .card-header
         %i.fa.fa-fw.fa-credit-card
-        = I18n.t('admin.payment.ideal')
+        = I18n.t('admin.payment.name')
         = form_tag payment_path, :method => :get do
-          = select_tag 'payment', options_for_select(Payment.payment_types), :include_blank => "all"
-          = select_tag 'type', options_for_select(Payment.transaction_types), :include_blank => "all"
+          = search_field_tag :search, params[:search],  placeholder: I18n.t('layouts.partials.search.placeholder'), class: 'form-control', :autocomplete => 'off'
+          = I18n.t('admin.payment.payment_type')
+          = select_tag :payment_type,  options_for_select(Payment.payment_types), include_blank: "all"
+          = I18n.t('admin.payment.transaction')
+          = select_tag :transaction_type,  options_for_select(Payment.transaction_types), include_blank: "all"
           = submit_tag 'Search'
       .table-responsive
         %table.table.table-bordered.table-striped.table-linked
@@ -29,6 +32,9 @@
               %th
                 .th
                   = I18n.t('admin.payment.member')
+              %th
+                .th
+                  = I18n.t('admin.payment.payment_type')
               %th
                 .th
                   = I18n.t('admin.payment.description')
@@ -45,9 +51,10 @@
               %td
                 - if transaction.member.present?
                   = link_to transaction.member.name, transaction.member
-
               %td
-                - if transaction.transaction_type.downcase == 'checkouttransaction'
+                = transaction.payment_type.gsub('_',' ')
+              %td
+                - if transaction.transaction_type == 'checkout'
                   = I18n.t 'checkout', scope: 'activerecord.errors.models.ideal_transaction.attributes'
                 - elsif transaction.transaction_type.downcase == 'activity'
                   - transaction.activities.each do |activity|
@@ -56,7 +63,7 @@
                   = transaction.description
 
               %td= number_to_currency(transaction.amount, :unit => '€')
-
+              -# This does not have any effect currently
               %td
                 - if transaction.status == 'paid' || transaction.status == 'paidout' || transaction.status == "SUCCEEDED"
                   %span.label.label-success= transaction.status

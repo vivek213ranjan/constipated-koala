@@ -13,6 +13,8 @@ class Admin::AppsController < ApplicationController
   end
 
   def payments
+
+    ## Add Search parameter in some clean manner.
     if (params[:payment].blank? && params[:type].blank?)
       @pagination, @transactions = pagy(Payment.order(created_at: :desc), items: params[:limit] ||= 20)
     elsif params[:type].blank?

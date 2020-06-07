@@ -173,6 +173,7 @@ GEM
     parallel (1.19.1)
     parser (2.7.1.2)
       ast (~> 2.4.0)
+    polyglot (0.3.5)
     puma (4.3.5)
       nio4r (~> 2.0)
     rabl (0.14.2)
@@ -251,6 +252,8 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    search_cop (1.1.0)
+      treetop
     sentry-raven (2.11.0)
       faraday (>= 0.7.6, < 1.0)
     sidekiq (6.0.4)
@@ -273,6 +276,8 @@ GEM
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.9)
+    treetop (1.6.10)
+      polyglot (~> 0.3)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     uglifier (4.1.20)
@@ -326,6 +331,7 @@ DEPENDENCIES
   rest-client
   rubocop
   sassc-rails
+  search_cop
   sentry-raven
   sidekiq
   spring

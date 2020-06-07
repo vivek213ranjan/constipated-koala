@@ -31,8 +31,8 @@ nl:
         is_enrollable: Inschrijfbaar
         is_freshmans: Eerstejaars
         is_masters: Masters
-        is_viewable: Toon in Koala
         is_payable: Betaalbaar
+        is_viewable: Toon in Koala
         location: Locatie
         name: Naam
         notes: Extra specificatie
@@ -161,7 +161,6 @@ nl:
           name: IDeal transactie kosten
         payconiq_transaction_costs:
           description: De kosten van een Payconiq-transactie, zodat deze apart kunnen worden berekend in het Payconiq-overzicht.
-          name: Payconiq transactie kosten
         positions:
           board: Bestuurslid
           chairman: Voorzitter

@@ -1,11 +1,16 @@
 #:nodoc:
 class Payment < ApplicationRecord
   require 'request'
+  include SearchCop
 
   self.primary_key = :token
 
   attr_accessor :issuer, :ideal_uri, :message, :payconiq_qrurl, :payconiq_deeplink
 
+  search_scope :search do
+    attributes :status, :description, :payment_type
+    attributes member: %w[member.first_name member.infix member.last_name]
+  end
   validates :description, presence: true
   validates :amount, presence: true, numericality: true
   validates :status, presence: true
@@ -62,7 +67,7 @@ class Payment < ApplicationRecord
 
       request.body = { :amount => (amount * 100).to_i,
                        :currency => 'EUR',
-                       :callbackUrl => "http://75a349d5c728.ngrok.io/api/hook/payconiq" }.to_json
+                       :callbackUrl => "http://66f3de60028e.ngrok.io/api/hook/payconiq" }.to_json
 
       request['Authorization'] = "Bearer #{ payconiq_online? ? ENV['PAYCONIQ_ONLINE_TOKEN'] : ENV['PAYCONIQ_DISPLAY_TOKEN'] }"
       request.content_type = 'application/json'
