@@ -1,5 +1,10 @@
 ---
 nl:
+  activerecord:
+    attributes:
+      settings:
+        payconiq_transaction_costs:
+          name: ''
   admin:
     activities:
       added_reservist: is op de deelnemerslijst geplaatst
@@ -11,7 +16,7 @@ nl:
         price_changed: Het deelname bedrag is veranderd
         price_error: Geen verbinding of geen nummer
       new: Nieuwe activiteit
-      remove_participant: Deelname van %{user} verwijderen?
+      remove_participant: Deelname van %{0} verwijderen?
       save: Activiteit opslaan?
       single: Activiteit
       title: Activiteiten
@@ -81,17 +86,21 @@ nl:
       ideal: iDeal transacties
       mails: Betalingsmails
       member: Lid
+      name: Transacties
       no_transactions: Geen transacties
       no_update: Kon niet updaten
       not_found: Geen transacties gevonden
       not_paid: Niet betaalde activiteiten
       overdue: Achterstallige betalingen (> 4 mails)
       paid: Betaald
+      payment_type: Betaalmethode
       per_page: transacties per pagina
       pinned: Gepinde Checkout transacties
       price: Prijs
       show: Toon
       state: Status
+      transaction: Transactie type
+      transaction_type: Transactie type
       whatsapp:
         copy: Bericht gekopieerd naar klembord
         copy_error: Bericht kon niet worden opgehaald
@@ -113,8 +122,3 @@ nl:
       show: Toon
       signature: Ondertekening
       user: Gebruiker
-  activerecord:
-    attributes:
-      settings:
-        payconiq_transaction_costs:
-          name: ""

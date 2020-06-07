@@ -8,6 +8,6 @@ class IdealTransactionsToPayment < ActiveRecord::Migration[6.0]
     add_column :payments, :transaction_type, :integer, default: 0
     add_column :payments, :payment_type, :integer, default: 0
 
-    change_column :checkout_transactions, :payment_method, :integer
+    change_column :checkout_transactions, :payment_method, :string, limit: 32
   end
 end

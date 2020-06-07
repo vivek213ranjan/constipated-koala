@@ -25,6 +25,7 @@ gem 'rest-client'
 # search engine
 gem 'fuzzily', :github => 'svsticky/fuzzily'
 gem 'responders'
+gem 'search_cop'
 
 # pagination
 gem 'pagy'

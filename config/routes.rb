@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 
         get 'download', to: 'home#download'
 
+        get 'member/payments', to: 'payments#index', as: :member_payments
+
         post 'mongoose', to: 'home#add_funds'
         post 'pay_activities', to: 'home#pay_activities'
 

@@ -58,7 +58,7 @@ class Activity < ApplicationRecord
   def self.debtors
     # All participants who will receive payment reminders
     joins(:participants).where('
-      activities.start_date <= ?
+      activities.is_payable IS TRUE
       AND
       participants.reservist IS FALSE
       AND
@@ -79,7 +79,7 @@ class Activity < ApplicationRecord
          AND
          participants.price IS NOT NULL
         )
-      )', Date.today).distinct
+      )').distinct
   end
 
   def payment_mail_recipients

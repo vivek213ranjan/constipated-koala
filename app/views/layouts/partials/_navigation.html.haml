@@ -33,7 +33,7 @@
 
         = link_to :payment, :class => 'list-group-item list-group-item-action' do
           %span= I18n.t("admin.navigation.ideal")
-          %i.fa.fa-caret-right{:class => ('active' if current_page?(:transactions))}
+          %i.fa.fa-caret-right{:class => ('active' if current_page?(:payment))}
 
         = link_to :checkout_products, :class => 'list-group-item list-group-item-action' do
           %span= I18n.t("admin.navigation.products")

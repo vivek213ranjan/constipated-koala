@@ -81,17 +81,21 @@ en:
       ideal: iDeal transactions
       mails: Paymentmails
       member: Member
+      name: Transactions
       no_transactions: No transactions
       no_update: Could not update
       not_found: No transactions found
       not_paid: Unpaid for activities
       overdue: Overdue payments (> 4 mails)
       paid: Paid
+      payment_type: Payment Method
       per_page: transactions per page
       pinned: Pinned Checkout transactions
       price: Price
       show: Show
       state: State
+      transaction: Transaction type
+      transaction_type: Transaction type
       whatsapp:
         copy: Message copied to clipboard
         copy_error: Message could not be retrieved
