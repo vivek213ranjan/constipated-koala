@@ -67,7 +67,7 @@ class Payment < ApplicationRecord
 
       request.body = { :amount => (amount * 100).to_i,
                        :currency => 'EUR',
-                       :callbackUrl => Rails.env.development? ? ENV['PAYCONIQ_CALLBACKURL'] : Rails.application.url_helpers.payconiq_hook_url }.to_json
+                       :callbackUrl => Rails.env.development? ? "#{ ENV['PAYCONIQ_CALLBACKURL'] }/api/hook/payconiq" : Rails.application.url_helpers.payconiq_hook_url }.to_json
 
       request['Authorization'] = "Bearer #{ payconiq_online? ? ENV['PAYCONIQ_ONLINE_TOKEN'] : ENV['PAYCONIQ_DISPLAY_TOKEN'] }"
       request.content_type = 'application/json'
