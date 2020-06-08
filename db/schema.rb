@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2020_05_27_123642) do
     t.text "comments", size: :medium
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text "description", size: :medium
+    t.text "description_nl", size: :medium
     t.integer "organized_by"
     t.boolean "is_enrollable"
     t.boolean "is_alcoholic"
@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(version: 2020_05_27_123642) do
     t.boolean "is_masters"
     t.boolean "is_freshmans"
     t.boolean "show_on_website", default: false, null: false
+    t.text "description_en"
+    t.boolean "show_participants", default: true
     t.boolean "is_payable", default: false
   end
 
@@ -105,7 +107,7 @@ ActiveRecord::Schema.define(version: 2020_05_27_123642) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "items"
-    t.integer "payment_method"
+    t.string "payment_method", limit: 32
   end
 
   create_table "educations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -323,6 +325,7 @@ ActiveRecord::Schema.define(version: 2020_05_27_123642) do
     t.integer "credentials_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "language", default: 0, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["credentials_id", "credentials_type"], name: "index_users_on_credentials_id_and_credentials_type", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

@@ -67,7 +67,7 @@ class Payment < ApplicationRecord
 
       request.body = { :amount => (amount * 100).to_i,
                        :currency => 'EUR',
-                       :callbackUrl => "http://66f3de60028e.ngrok.io/api/hook/payconiq" }.to_json
+                       :callbackUrl => Rails.env.development? ? ENV['PAYCONIQ_CALLBACKURL'] : Rails.application.url_helpers.payconiq_hook_url }.to_json
 
       request['Authorization'] = "Bearer #{ payconiq_online? ? ENV['PAYCONIQ_ONLINE_TOKEN'] : ENV['PAYCONIQ_DISPLAY_TOKEN'] }"
       request.content_type = 'application/json'
@@ -138,6 +138,7 @@ class Payment < ApplicationRecord
     when :checkout
       # additional check if not already added checkout funds
       return unless transaction_id.empty?
+
       # create a single transaction to update the checkoutbalance and mark the Payment as processed
       Payment.transaction do
         transaction = CheckoutTransaction.create!(:price => (amount - transaction_fee), :checkout_balance => CheckoutBalance.find_by_member_id!(member), :payment_method => payment_type)
