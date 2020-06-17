@@ -30,7 +30,7 @@ class Payment < ApplicationRecord
 
   after_validation(on: :create) do
     self.amount += transaction_fee
-    case :payment_type
+    case payment_type.to_sym
     when :ideal
       http = ConstipatedKoala::Request.new ENV['MOLLIE_DOMAIN']
       self.token = Digest::SHA256.hexdigest("#{ member.id }#{ Time.now.to_f }#{ ideal_redirect_uri }")
@@ -82,7 +82,7 @@ class Payment < ApplicationRecord
   end
 
   def update!
-    case :payment_type
+    case payment_type.to_sym
     when :ideal
       http = ConstipatedKoala::Request.new ENV['MOLLIE_DOMAIN']
       @status = status
@@ -97,7 +97,7 @@ class Payment < ApplicationRecord
       # first time paid as a response
       return true if status == 'paid' && @status != 'paid'
 
-      message = I18n.t('processed', scope: 'activerecord.errors.models.ideal_transaction')
+      self.message = I18n.t('processed', scope: 'activerecord.errors.models.ideal_transaction')
       return false
     when :pin
     else
@@ -182,6 +182,6 @@ class Payment < ApplicationRecord
   end
 
   def activities
-    Activity.find(transaction_id) if :activity?
+    Activity.find(transaction_id) if activity?
   end
 end
