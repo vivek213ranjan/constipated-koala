@@ -165,7 +165,7 @@ class Members::HomeController < ApplicationController
       )
 
       if payment.save
-        render :json => {qrurl: payment.payconiq_qrurl, amount: payment.amount, deeplink: payment.payconiq_deeplink }
+        render json: { qrurl: payment.payconiq_qrurl, amount: payment.amount, deeplink: payment.payconiq_deeplink }
       else
         flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
         redirect_to members_home_path
@@ -200,7 +200,6 @@ class Members::HomeController < ApplicationController
     send_data render_to_string(:layout => false),
               :filename => "#{ @member.name.downcase.tr(' ', '-') }.html",
               :type => 'application/html',
-              :disposition => 'attachment'
               :position => 'attachment'
   end
 
@@ -220,6 +219,8 @@ class Members::HomeController < ApplicationController
 
   def transaction_params
     params.permit(:amount, :issuer, :payment_type)
+  end
+
   def user_post_params
     params.require(:member).permit(:language)
   end

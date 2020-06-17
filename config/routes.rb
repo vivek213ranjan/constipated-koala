@@ -103,7 +103,7 @@ Rails.application.routes.draw do
       end
 
       scope 'apps' do
-        get 'payments',           to: 'apps#payments', as:'payment'
+        get 'payments',           to: 'apps#payments', as: 'payment'
         get 'checkout',           to: 'apps#checkout'
 
         # json checkout urls
