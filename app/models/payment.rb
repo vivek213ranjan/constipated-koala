@@ -8,7 +8,7 @@ class Payment < ApplicationRecord
   attr_accessor :issuer, :ideal_uri, :message, :payconiq_qrurl, :payconiq_deeplink
 
   search_scope :search do
-    attributes :status, :description, :payment_type
+    attributes :status, :description, :payment_type, :token
     attributes member: %w[member.first_name member.infix member.last_name]
   end
   validates :description, presence: true

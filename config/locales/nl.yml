@@ -431,6 +431,7 @@ nl:
         alumni: alumni
         anybody: iedereen
         placeholder: Zoek lid op naam, e-mailadres, telefoonnummer of studentnummer, of gebruik studie:[naam], jaargang:[jaartal], status:[status], en tag:[type]
+        placeholder-transactions: Zoek transacties op naam, transactie-type, Betaling-methode, status of beschrijving
         studying: studerend
   navigation:
     activity: Activiteiten

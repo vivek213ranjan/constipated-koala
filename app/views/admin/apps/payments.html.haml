@@ -16,12 +16,12 @@
         %i.fa.fa-fw.fa-credit-card
         = I18n.t('admin.payment.name')
         = form_tag payment_path, :method => :get do
-          = search_field_tag :search, params[:search],  placeholder: I18n.t('layouts.partials.search.placeholder'), class: 'form-control', :autocomplete => 'off'
-          = I18n.t('admin.payment.payment_type')
-          = select_tag :payment_type,  options_for_select(Payment.payment_types), include_blank: "all"
-          = I18n.t('admin.payment.transaction')
-          = select_tag :transaction_type,  options_for_select(Payment.transaction_types), include_blank: "all"
-          = submit_tag 'Search'
+          = search_field_tag :search, params[:search],  placeholder: I18n.t('layouts.partials.search.placeholder-transactions'), class: 'form-control', :autocomplete => 'off'
+          = label_tag I18n.t('admin.payment.payment_type')
+          = select_tag :payment,  options_for_select(Payment.payment_types, params[:payment]), include_blank: "all"
+          = label_tag I18n.t('admin.payment.transaction')
+          = select_tag :transaction,  options_for_select(Payment.transaction_types, params[:transaction]), include_blank: "all"
+          = submit_tag 'Search', name: nil
       .table-responsive
         %table.table.table-bordered.table-striped.table-linked
           %thead
