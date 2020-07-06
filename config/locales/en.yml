@@ -432,6 +432,7 @@ en:
         alumni: alumni
         anybody: anybody
         placeholder: search member by name, email, phone number or student number, or use study:[name], year:[year], state:[state] and tag:[type]
+        placeholder-transactions: Search transaction by name, transaction-type, payment-method, status or description
         studying: studying
   navigation:
     activity: Activities

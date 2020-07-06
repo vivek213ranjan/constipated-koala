@@ -13,7 +13,7 @@ class Admin::HomeController < ApplicationController
 
     @unpayed = Participant.where(:reservist => false, :paid => false, :price => nil)
                           .joins(:activity)
-                          .where('activities.is_payable IS TRUE AND activities.price IS NOT NULL')
+                          .where('activities.is_payable IS ? AND activities.price IS NOT ?', true, nil)
                           .sum('activities.price') + Participant.where(:reservist => false, :paid => false)
                                                                 .joins(:activity)
                                                                 .where(activities: { is_payable: true })

@@ -20,8 +20,6 @@ class Api::WebhookController < ApiController
   end
 
   def payconiq_hook
-    puts "hoook"
-    puts params[:paymentId]
     transaction = Payment.find_by_trxid!(params[:paymentId])
     transaction.finalize! if transaction.update!
 
