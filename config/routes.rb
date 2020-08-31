@@ -21,8 +21,8 @@ Rails.application.routes.draw do
 
         get 'member/payments', to: 'payments#index', as: :member_payments
 
-        post 'mongoose', to: 'home#add_funds'
-        post 'pay_activities', to: 'home#pay_activities'
+        post 'mongoose', to: 'payments#add_funds'
+        post 'pay_activities', to: 'payments#pay_activities'
 
         # TODO: should this be moved to nginx or
         # @deprated these old routes

@@ -8,7 +8,7 @@ class Payment < ApplicationRecord
   attr_accessor :issuer, :ideal_uri, :message, :payconiq_qrurl, :payconiq_deeplink
 
   search_scope :search do
-    attributes :status, :description, :payment_type, :token
+    attributes :status, :description, :payment_type, :token, :trxid
     attributes member: %w[member.first_name member.infix member.last_name]
   end
   validates :description, presence: true
@@ -66,6 +66,8 @@ class Payment < ApplicationRecord
       request = http.post("/#{ ENV['PAYCONIQ_VERSION'] }/payments")
 
       request.body = { :amount => (amount * 100).to_i,
+                       :reference => payment_type,
+                       :description => description,
                        :currency => 'EUR',
                        :callbackUrl => Rails.env.development? ? "#{ ENV['PAYCONIQ_CALLBACKURL'] }/api/hook/payconiq" : Rails.application.url_helpers.payconiq_hook_url }.to_json
 

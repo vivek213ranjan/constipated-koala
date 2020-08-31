@@ -36,12 +36,11 @@ class Members::PaymentsController < ApplicationController
              .joins(:activity)
              .where(:activities => { is_payable: true })
              .select { |n| params[:activity_ids].map(&:to_i).include? n.activity_id }
-
+    description = "Activiteiten - #{ unpaid.map{|p| "#{p.activity.id}"
     amount = unpaid.sum(&:currency)
-
     if transaction_params[:payment_type] == "Payconiq"
       payconiq = Payment.new(
-        :description => 'Activiteiten-betaling',
+        :description => description,
         :amount => amount,
         :member => member,
         :payment_type => :payconiq_online,
@@ -56,7 +55,7 @@ class Members::PaymentsController < ApplicationController
       end
     else
       ideal = Payment.new(
-        :description => I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout'),
+        :description => description,
         :amount => (transaction_params[:amount].to_f + Settings.mongoose_ideal_costs),
         :issuer => transaction_params[:bank],
         :member => member,
@@ -79,6 +78,7 @@ class Members::PaymentsController < ApplicationController
   def add_funds
     member = Member.find(current_user.credentials_id)
     balance = CheckoutBalance.find_or_create_by!(member: member)
+    description = I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout')
 
     if transaction_params[:amount].to_f <= Settings.mongoose_ideal_costs
       flash[:notice] = I18n.t('failed', scope: 'activerecord.errors.models.ideal_transaction')
@@ -94,7 +94,7 @@ class Members::PaymentsController < ApplicationController
 
     if transaction_params[:payment_type] == "Payconiq"
       payment = Payment.new(
-        :description => I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout'),
+        :description => description,
         :amount => transaction_params[:amount].to_f,
         :member => member,
         :payment_type => :payconiq_online,
@@ -111,7 +111,7 @@ class Members::PaymentsController < ApplicationController
       end
     else
       payment = Payment.new(
-        :description => I18n.t('activerecord.errors.models.ideal_transaction.attributes.checkout'),
+        :description => description,
         :amount => transaction_params[:amount].to_f,
         :issuer => transaction_params[:bank],
         :member => member,
