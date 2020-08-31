@@ -92,3 +92,12 @@ en:
       payments: Payments
       pictures: Pictures
       vacancies: Vacancies
+    payments:
+      unpaid_activity:
+        title: Unpaid activities
+        pay: Pay activities
+        checkall: Toggle all
+      payconiq_instructions:
+        title: Scan the QR Code to charge funds or pay activities
+        description:  "Scan the QR Code with your bank app. After you are done with the transaction press \"OK\" to refresh the page. \n\n Total amount: €%{amount}"
+

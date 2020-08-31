@@ -30,8 +30,8 @@ $(document).on('ajax:success', function(event, data){
         window.location.href = data.deeplink;
     } else {
         Swal.fire({
-            title: "Scan the QR Code!",
-            text: "Scan the QR Code with the payconiq application to finish this payment, cost is : " + data.amount,
+            title: I18n.t("members.payments.payconiq_instructions.title"),
+            text: I18n.t("members.payments.payconiq_instructions.description", {amount: data.amount}),
             imageWidth: 400,
             imageHeight: 400,
             imageUrl: data.qrurl + "&s=L",

@@ -160,6 +160,7 @@ nl:
           description: De kosten van een iDEAL-transactie, zodat deze apart kunnen worden berekend in het iDEAL-overzicht.
           name: IDeal transactie kosten
         payconiq_transaction_costs:
+          name: Payconiq transactie kosten
           description: De kosten van een Payconiq-transactie, zodat deze apart kunnen worden berekend in het Payconiq-overzicht.
         positions:
           board: Bestuurslid

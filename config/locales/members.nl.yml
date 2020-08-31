@@ -91,4 +91,12 @@ nl:
       links: Externe links
       payments: Betalingen
       pictures: Foto's
-      vacancies: Vacatures
+      vacancies: Vacaturespayconiq_instructions
+    payments:
+      unpaid_activity:
+        title: Openstaande activiteiten
+        pay: Betaal activiteiten
+        checkall: Selecteer alles
+      payconiq_instructions:
+        title: Scan de QR Code om je mongoose of activiteit transactie te voltooien
+        description:  "Scan de QR Code met je bank app. Als je klaar bent met de transactie klik op \"OK\" om de pagina te verversen. \n\n Totaal bedrag : €%{amount}"

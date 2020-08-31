@@ -6,10 +6,9 @@
         .card-header
           %span
             %i.fa.fa-fw.fa-fw.fa-ticket-alt
-            Openstaande activiteiten
-            -# I18n.t("members.navigation.payments")
-            = f.submit "betaal activiteiten", class: 'button btn btn-success btn-sm', type: "submit", id: "pay-activity"
-            = submit_tag 'checkall', :type => 'button', class: "btn btn-success btn-sm", id: 'check-all'
+            = I18n.t("members.payments.unpaid_activity.title")
+            = f.submit I18n.t("members.payments.unpaid_activity.pay"), class: 'button btn btn-success btn-sm', type: "submit", id: "pay-activity"
+            = submit_tag I18n.t("members.payments.unpaid_activity.checkall"), :type => 'button', class: "btn btn-success btn-sm", id: 'check-all'
             = select_tag :payment_type, options_for_select([["Payconiq +€#{String(@payconiq_transaction_costs)}", 'Payconiq'],["Ideal +€#{String(@transaction_costs)}", 'Ideal']])
         %table.table.table-striped
           %tbody
