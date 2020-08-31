@@ -89,7 +89,27 @@
                 %td
                   %button.btn.btn-clipboard.btn-danger{ data: {'texturl': member_payment_whatsapp_path(member)} }
                     %i.fa.fa-fw.fa-copy
-
+        .card
+          .card-header
+            %i.fas.fa-fw.fa-qrcode
+            Payconiq export
+          .card-body
+            .input-group#transaction_dates_pq
+              .col-6.col-sm-3
+                Van
+                %input#pq-start-date{ :type => 'date', :value =>  1.weeks.ago.strftime('%Y-%m-%d') }
+              .col-6.col-sm-3
+                Tot
+                %input#pq-end-date{ :type => 'date', :value =>  1.days.from_now.strftime('%Y-%m-%d') }
+              .col-sm-3.col-6
+                %span.input-group-btn#update_transactions_pq
+                  %button.btn.btn-warning
+                    = I18n.t('editing.update')
+              .col-sm-3.col-6
+                %span.input-group-btn#copy_transactions_pq
+                  %button.btn.btn-clipboard{ :"data-clipboard-text" => @payconiq_clipboard }
+                    %i.fa.fa-copy
+                    = I18n.t('editing.copy')
         .card
           .card-header
             %i.far.fa-fw.fa-money-bill-alt
