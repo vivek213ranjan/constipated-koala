@@ -114,6 +114,10 @@ class Members::HomeController < ApplicationController
                                    educations_attributes: [:id, :status])
   end
 
+  def transaction_params
+    params.permit(:amount, :issuer, :payment_type)
+  end
+
   def user_post_params
     params.require(:member).permit(:language)
   end
