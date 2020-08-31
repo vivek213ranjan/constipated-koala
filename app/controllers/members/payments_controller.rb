@@ -36,7 +36,7 @@ class Members::PaymentsController < ApplicationController
              .joins(:activity)
              .where(:activities => { is_payable: true })
              .select { |n| params[:activity_ids].map(&:to_i).include? n.activity_id }
-    description = "Activiteiten - #{ unpaid.map{|p| "#{p.activity.id}"
+    description = "Activiteiten - #{ unpaid.map{|p| "#{p.activity.id}"}}"
     amount = unpaid.sum(&:currency)
     if transaction_params[:payment_type] == "Payconiq"
       payconiq = Payment.new(
