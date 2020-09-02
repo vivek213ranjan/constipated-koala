@@ -35,6 +35,7 @@ signing-key.pem
 
 /public/packs
 /public/packs-test
+
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
