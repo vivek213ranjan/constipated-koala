@@ -35,11 +35,12 @@ module.exports = {
     },
     screens: {
       // this breakpoints are copied from Yeti
-      'xs': '0',
-      'sm': '576px',
-      'md': '768px',
-      'lg': '992px',
-      'xl': '1200px',
+      // the xs breakpoint doesn't make much sense
+      //xs: '0',
+      sm: '576px',
+      md: '768px',
+      lg: '992px',
+      xl: '1200px',
     }
   },
   variants: {},
