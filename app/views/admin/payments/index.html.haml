@@ -107,9 +107,22 @@
                     = I18n.t('editing.update')
               .col-sm-3.col-6
                 %span.input-group-btn#copy_transactions_pq
-                  %button.btn.btn-clipboard{ :"data-clipboard-text" => @payconiq_clipboard }
+                  %button.btn.btn-clipboard{ :"data-clipboard-text" => @payment_clipboard[:activiteiten] }
                     %i.fa.fa-copy
                     = I18n.t('editing.copy')
+            %table.table.table-striped.table-linked#activity_table
+              %tbody
+                %tr
+                  %td= "Total transaction cost"
+                  %td.d-none.d-md-block#payment_total= number_to_currency(@payment_clipboard[:total], :unit => '€')
+                %tr
+                  %td= "Payconiq Online amount"
+                  %td.d-none.d-md-block#payment_online= @payment_clipboard[:online]
+                %tr
+                  %td= "Payconiq Display amount"
+                  %td.d-none.d-md-block#payment_display= @payment_clipboard[:display]
+
+
         .card
           .card-header
             %i.far.fa-fw.fa-money-bill-alt
@@ -118,9 +131,7 @@
           .card-body
             .input-group#transaction_dates
               .col-6.col-sm-3
-
                 %input#pin-total-date{ :type => 'date', :value =>  1.days.ago.strftime('%Y-%m-%d') }
-
               .col-sm-3.col-6
                 = I18n.t('admin.payment.day_total')
                 %span#pin-total-result
@@ -134,6 +145,8 @@
                   %button.btn.btn-clipboard{ :"data-clipboard-text" => @dat }
                     %i.fa.fa-copy
                     = I18n.t('editing.copy')
+
+
 
             %table.table.table-striped.table-linked#transactions
               %thead

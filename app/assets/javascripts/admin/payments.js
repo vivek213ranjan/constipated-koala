@@ -84,9 +84,12 @@ function getPayconiqTransactions(button) {
     })
         .done(function (data, status) {
             var clipboard = document.querySelector("#copy_transactions_pq .btn-clipboard")
-            clipboard.setAttribute('data-clipboard-text', JSON.stringify(data));
-            console.log(data)
+            clipboard.setAttribute('data-clipboard-text', JSON.stringify(data.activiteiten));
+            $("#payment_total").text("€" + parseFloat(data.total).toFixed(2))
+            $("#payment_online").text(data.online)
+            $("#payment_display").text(data.display)
             toastr.success(I18n.t("admin.payment.found"))
+
 
         })
         .fail(function () {

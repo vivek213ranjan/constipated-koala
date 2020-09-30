@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_19_120150) do
+ActiveRecord::Schema.define(version: 2020_08_31_173249) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name", null: false
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2020_06_19_120150) do
     t.text "description_en"
     t.boolean "show_participants", default: true
     t.boolean "is_payable", default: false
+    t.string "VAT", default: "21"
   end
 
   create_table "admins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -137,6 +138,8 @@ ActiveRecord::Schema.define(version: 2020_06_19_120150) do
     t.text "comments", size: :medium
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "ledgernr", default: ""
+    t.string "cost_location", default: ""
   end
 
   create_table "impressions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
